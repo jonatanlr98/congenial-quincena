@@ -1,0 +1,200 @@
+﻿{
+    "definitions": {
+        "action-root": {
+            "description": "Action file",
+            "mapping": {
+                "properties": {
+                    "name": "string",
+                    "description": "string",
+                    "inputs": "inputs",
+                    "runs": "runs",
+                    "outputs": "outputs"
+                },
+                "loose-key-type": "non-empty-string",
+                "loose-value-type": "any"
+            }
+        },
+        "inputs": {
+            "mapping": {
+                "loose-key-type": "non-empty-string",
+                "loose-value-type": "input"
+            }
+        },
+        "input": {
+            "mapping": {
+                "properties": {
+                    "default": "input-default-context"
+                },
+                "loose-key-type": "non-empty-string",
+                "loose-value-type": "any"
+            }
+        },
+        "outputs": {
+            "mapping": {
+                "loose-key-type": "non-empty-string",
+                "loose-value-type": "outputs-attributes"
+            }
+        },
+        "outputs-attributes": {
+            "mapping": {
+                "properties": {
+                    "description": "string",
+                    "value": "output-value"
+                }
+            }
+        },
+        "runs": {
+            "one-of": [
+                "container-runs",
+                "node12-runs",
+                "plugin-runs",
+                "composite-runs"
+            ]
+        },
+        "container-runs": {
+            "mapping": {
+                "properties": {
+                    "using": "non-empty-string",
+                    "image": "non-empty-string",
+                    "entrypoint": "non-empty-string",
+                    "args": "container-runs-args",
+                    "env": "container-runs-env",
+                    "pre-entrypoint": "non-empty-string",
+                    "pre-if": "non-empty-string",
+                    "post-entrypoint": "non-empty-string",
+                    "post-if": "non-empty-string"
+                }
+            }
+        },
+        "container-runs-args": {
+            "sequence": {
+                "item-type": "container-runs-context"
+            }
+        },
+        "container-runs-env": {
+            "context": [
+                "inputs"
+            ],
+            "mapping": {
+                "loose-key-type": "non-empty-string",
+                "loose-value-type": "string"
+            }
+        },
+        "node12-runs": {
+            "mapping": {
+                "properties": {
+                    "using": "non-empty-string",
+                    "main": "non-empty-string",
+                    "pre": "non-empty-string",
+                    "pre-if": "non-empty-string",
+                    "post": "non-empty-string",
+                    "post-if": "non-empty-string"
+                }
+            }
+        },
+        "plugin-runs": {
+            "mapping": {
+                "properties": {
+                    "plugin": "non-empty-string"
+                }
+            }
+        },
+        "composite-runs": {
+            "mapping": {
+                "properties": {
+                    "using": "non-empty-string",
+                    "steps": "composite-steps"
+                }
+            }
+        },
+        "composite-steps": {
+            "sequence": {
+                "item-type": "composite-step"
+            }
+        },
+        "composite-step": {
+            "mapping": {
+                "properties": {
+                    "name": "string-steps-context",
+                    "id": "non-empty-string",
+                    "run": {
+                        "type": "string-steps-context",
+                        "required": true
+                    },
+                    "env": "step-env",
+                    "working-directory": "string-steps-context",
+                    "shell": {
+                        "type": "non-empty-string",
+                        "required": true
+                    }
+                }
+            }
+        },
+        "container-runs-context": {
+            "context": [
+                "inputs"
+            ],
+            "string": {}
+        },
+        "output-value": {
+            "context": [
+                "github",
+                "strategy",
+                "matrix",
+                "steps",
+                "inputs",
+                "job",
+                "runner",
+                "env"
+            ],
+            "string": {}
+        },
+        "input-default-context": {
+            "context": [
+                "github",
+                "strategy",
+                "matrix",
+                "job",
+                "runner",
+                "hashFiles(1,255)"
+            ],
+            "string": {}
+        },
+        "non-empty-string": {
+            "string": {
+                "require-non-empty": true
+            }
+        },
+        "string-steps-context": {
+            "context": [
+                "github",
+                "inputs",
+                "strategy",
+                "matrix",
+                "steps",
+                "job",
+                "runner",
+                "env",
+                "hashFiles(1,255)"
+            ],
+            "string": {}
+        },
+        "step-env": {
+            "context": [
+                "github",
+                "inputs",
+                "strategy",
+                "matrix",
+                "steps",
+                "job",
+                "runner",
+                "env",
+                "hashFiles(1,255)"
+            ],
+            "mapping": {
+                "loose-key-type": "non-empty-string",
+                "loose-value-type": "string"
+            }
+        }
+    }
+}
